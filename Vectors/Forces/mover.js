@@ -13,7 +13,7 @@ class Mover {
         this.acc.add(f);
     }
 
-    friction(){
+    friction(mu){
         let diff = height - (this.pos.y + this.r + 1);
 
         if (diff < 1){
@@ -32,9 +32,25 @@ class Mover {
             this.applyForce(frictVector);
 
         }
-
     }
     
+    drag(c){
+        // Get the direction of drag force
+        let dragVector = this.vel.copy();
+        dragVector.normalize();
+        dragVector.mult(-1);
+        
+        // Calculate the magnitude of drag force
+
+
+        let speedSq = this.vel.magSq();
+        dragVector.setMag(speedSq * c);
+        // Apply the force
+        this.applyForce(dragVector);
+
+    }
+
+
     // Maintains the Mover inside the canvas
     edges(){
         if (this.pos.y >= height - this.r - 1){

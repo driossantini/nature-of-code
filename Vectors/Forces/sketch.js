@@ -18,34 +18,35 @@ function setup() {
     movers[i] = new Mover(random(width), 25, random(1,8));
   }
 
+  jello = new Liquid(0, 2*width/3, width, height/3, dragC);
+
 }
 
 function draw() {
   background(0);
   
-  fill(18,231,255,125);
-  noStroke();
-  rect(0, height/2, width, height/2);
- 
+  jello.show();
+
   for (let mover of movers){
-    if (mouseIsPressed) {
-      let wind = createVector(0.1, 0);
+    if (mouseIsPressed && (mouseButton == LEFT)) {
+      let wind = createVector(0.5, 0);
       mover.applyForce(wind);
     }
 
+    if (mouseIsPressed && (mouseButton == CENTER)) {
+      let antigravity = createVector(0, -1.1);
+      mover.applyForce(antigravity);
+    }
 
     let gravity = createVector(0, 0.2);
     let weight = p5.Vector.mult(gravity, mover.mass);
-
-    if (mover.pos.y > height/2){
-      mover.drag(dragC);
-    }
 
     mover.applyForce(weight);
     mover.friction(mu);
     mover.update();
     mover.edges();
     mover.show();
+    jello.update(mover);
   }
 
 }
